@@ -37,7 +37,7 @@ public class SwaggerConfig {
 	private static ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
 			.title("PISMO BACK TEST 3.0")
-			.description("API MVC Restfull with Maven, JAVA 11 and SpringBoot 2.3.x")
+			.description("API MVC Restfull with Maven, JAVA 11 and SpringBoot 2.4.0")
 			.version("1.0")
 			.contact(new Contact("Marcus Voltolim", "https://github.com/mvoltolim", "marcus.voltolim@gmail.com"))
 			.build();

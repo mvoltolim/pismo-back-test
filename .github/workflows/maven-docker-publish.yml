@@ -42,6 +42,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: mvoltolim/pismo-back-test/pismo-back-test-image
+          repository: mvoltolim/pismo-back-test/pismo-back-test
           tag_with_ref: true
           push: true
