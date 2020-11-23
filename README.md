@@ -97,7 +97,9 @@ All exceptions are caught and handled in **DefaultControllerAdvice** in order to
 ## Run it:
 * Import this project into your IDE as a MAVEN project, preferably intelliJ;
 * After all dependencies are downloaded, run the tests;
-* Finally, run the Application, using the **PismoApplication** class, by default it will start on port 8080.
+* Finally, run the Application, using the **PismoApplication** class
+* Alternatively run the following mvn command: **mvn spring-boot:run**
+* Both by default it will start on port 8080.
 * Test the endpoints using the Swagger interface at: http://localhost:8080/swagger-ui/
   or use any Client-Rest of your choice, such as: Postman or Insomnia
 

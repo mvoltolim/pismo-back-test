@@ -41,13 +41,13 @@ public abstract class CrudServiceImpl<R extends JpaRepository<T, I>, T extends P
 
 	@Transactional
 	@Override
-	public D create(@NonNull D dto) {
+	public I create(@NonNull D dto) {
 		throwsException(Objects.isNull(dto.getId()), ValidationMsg.ENTITY_WITH_ID);
 
 		var entity = convertToEntity(dto);
-		var dtoNewEntity = convertToDto(repository.saveAndFlush(entity));
-		logInfo("Create '{}' with ID: '{}'", entityName, dtoNewEntity.getId());
-		return dtoNewEntity;
+		repository.saveAndFlush(entity);
+		logInfo("Create '{}' with ID: '{}'", entityName, entity.getId());
+		return entity.getId();
 	}
 
 	@Transactional

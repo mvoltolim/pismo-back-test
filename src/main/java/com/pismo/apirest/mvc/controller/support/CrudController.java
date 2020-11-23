@@ -37,7 +37,7 @@ public abstract class CrudController<S extends CrudService<I, D>, I, D> {
 
 	@JsonView(JsonViews.Create.class)
 	@PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-	public ResponseEntity<D> create(@Validated({Default.class, ValidationGroups.Create.class}) @RequestBody D dto) {
+	public ResponseEntity<I> create(@Validated({Default.class, ValidationGroups.Create.class}) @RequestBody D dto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
 	}
 

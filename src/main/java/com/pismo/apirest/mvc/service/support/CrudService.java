@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface CrudService<I, D> {
 
-	D create(D dto);
+	I create(D dto);
 
 	D update(D dto);
 

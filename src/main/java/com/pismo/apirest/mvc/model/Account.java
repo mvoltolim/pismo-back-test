@@ -19,8 +19,7 @@ import lombok.ToString;
 //@Table
 public class Account extends AbstractPersistable<Long> {
 
-
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String documentNumber;
 
 	@OneToMany(mappedBy = "account")
