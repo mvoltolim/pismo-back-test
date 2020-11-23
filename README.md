@@ -101,6 +101,12 @@ All exceptions are caught and handled in **DefaultControllerAdvice** in order to
 * Test the endpoints using the Swagger interface at: http://localhost:8080/swagger-ui/
   or use any Client-Rest of your choice, such as: Postman or Insomnia
 
+## Deploy:
+* Heroku:
+  * https://pismo-back-test.herokuapp.com/swagger-ui/
+* Artefatos:
+  * https://github.com/orgs/mvoltolim/packages?repo_name=pismo-back-test
+
 ## Technologies:
 * JAVA 11
 * SpringBoot 2.4.0

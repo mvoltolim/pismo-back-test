@@ -1,7 +1,7 @@
 name: Maven & Docker Deploy
 on:
   release:
-    types: [ published ]
+    types: [ created ]
 jobs:
   build-maven:
     runs-on: ubuntu-latest
