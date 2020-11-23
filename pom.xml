@@ -19,6 +19,7 @@
 		<swagger-version>3.0.0</swagger-version>
 		<modelmapper.version>2.3.8</modelmapper.version>
 		<spring-boot-admin.version>2.3.1</spring-boot-admin.version>
+		<repository.name>mvoltolim/pismo-back-test</repository.name>
 	</properties>
 
 	<dependencies>
@@ -129,7 +130,7 @@
 	<scm>
 		<connection>scm:git:${project.scm.url}</connection>
 		<developerConnection>scm:git:${project.scm.url}</developerConnection>
-		<url>git@github.com:mvoltolim/pismo-test-back.git</url>
+		<url>git@github.com:${repository.name}.git</url>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -137,7 +138,7 @@
 		<repository>
 			<id>github</id>
 			<name>GitHub Packages</name>
-			<url>https://maven.pkg.github.com/mvoltolim/pismo-test-back</url>
+			<url>https://maven.pkg.github.com/${repository.name}</url>
 		</repository>
 	</distributionManagement>
 
