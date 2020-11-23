@@ -37,10 +37,11 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R && mv artifact/* ${{ github.workspace }}
       - name: Push to GitHub Packages Docker
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v1
         with:
-          #          username: ${{ github.actor }}
-          #          password: ${{ secrets.GITHUB_TOKEN }}
-          #          registry: docker.pkg.github.com
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
           repository: mvoltolim/pismo-back-test/pismo-back-test-image
+          tag_with_ref: true
           push: true
