@@ -1,7 +1,7 @@
 name: Maven & Docker Deploy
 on:
-  push:
-    branches-ignore: [ master ]
+  release:
+    types: [published]
 jobs:
   build-maven:
     runs-on: ubuntu-latest
