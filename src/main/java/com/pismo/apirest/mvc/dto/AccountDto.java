@@ -1,7 +1,9 @@
 package com.pismo.apirest.mvc.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pismo.apirest.mvc.dto.support.PersistableDto;
 
+import java.math.BigDecimal;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
@@ -17,5 +19,8 @@ public class AccountDto extends PersistableDto<Long> {
 
 	@NotEmpty
 	private String documentNumber;
+
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	private BigDecimal availableCreditLimit;
 
 }

@@ -2,6 +2,7 @@ package com.pismo.apirest.mvc.service;
 
 import com.pismo.apirest.mvc.config.ModelMapperConfig;
 import com.pismo.apirest.mvc.dto.AccountDto;
+import com.pismo.apirest.mvc.enums.OperationType;
 import com.pismo.apirest.mvc.exception.CustomRuntimeException;
 import com.pismo.apirest.mvc.model.Account;
 import com.pismo.apirest.mvc.repository.AccountRepository;
@@ -15,16 +16,19 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import static com.pismo.apirest.mvc.TestUtils.getAccount;
 import static com.pismo.apirest.mvc.TestUtils.getAccountDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -52,11 +56,14 @@ class AccountServiceTest {
 
 	@Test
 	void create() {
-		given(repository.saveAndFlush(any(Account.class))).willAnswer(invocation -> invocation.getArgument(0));
+		given(repository.saveAndFlush(any(Account.class))).willReturn(getAccount("12345678900", new BigDecimal("500")));
 
 		var expected = service.create(new AccountDto());
 
 		assertThat(expected).isInstanceOf(AccountDto.class);
+		assertThat(expected.getDocumentNumber()).isEqualTo("12345678900");
+		assertThat(expected.getAvailableCreditLimit()).isEqualTo("500");
+
 		verify(repository).saveAndFlush(any(Account.class));
 		verifyNoMoreInteractions(repository);
 	}
@@ -72,7 +79,7 @@ class AccountServiceTest {
 	@Test
 	void update() {
 		given(repository.saveAndFlush(any(Account.class))).willAnswer(invocation -> invocation.getArgument(0));
-		given(repository.existsById(any(Long.class))).willReturn(true);
+		given(repository.existsById(anyLong())).willReturn(true);
 
 		var expected = service.update(getAccountDto(1L, "12345678900"));
 
@@ -91,7 +98,7 @@ class AccountServiceTest {
 
 	@Test
 	void update_EntityNoExists() {
-		given(repository.existsById(any(Long.class))).willReturn(false);
+		given(repository.existsById(anyLong())).willReturn(false);
 
 		var expected = assertThrows(CustomRuntimeException.class, () -> service.update(getAccountDto(1L, "12345678900")));
 		assertThat(expected).hasMessage("entity_no_exists: [Account]");
@@ -100,8 +107,51 @@ class AccountServiceTest {
 	}
 
 	@Test
+	void updateAvailableCreditLimit_positiveTransaction() {
+		given(repository.findById(anyLong())).willReturn(Optional.of(getAccount("12345678900", new BigDecimal("500"))));
+		given(repository.saveAndFlush(any(Account.class))).willAnswer(invocation -> invocation.getArgument(0));
+
+		var expected = service.updateAvailableCreditLimit(1L, OperationType.PAGAMENTO, new BigDecimal("100"));
+
+		assertThat(expected).isInstanceOf(Account.class);
+		assertThat(expected.getAvailableCreditLimit()).isEqualTo("600");
+
+		verify(repository).findById(anyLong());
+		verify(repository).saveAndFlush(any(Account.class));
+		verifyNoMoreInteractions(repository);
+	}
+
+	@Test
+	void updateAvailableCreditLimit_negativeTransaction() {
+		given(repository.findById(anyLong())).willReturn(Optional.of(getAccount("12345678900", new BigDecimal("500"))));
+		given(repository.saveAndFlush(any(Account.class))).willAnswer(invocation -> invocation.getArgument(0));
+
+		var expected = service.updateAvailableCreditLimit(1L, OperationType.COMPRA_A_VISTA, new BigDecimal("100"));
+
+		assertThat(expected).isInstanceOf(Account.class);
+		assertThat(expected.getAvailableCreditLimit()).isEqualTo("400");
+
+		verify(repository).findById(anyLong());
+		verify(repository).saveAndFlush(any(Account.class));
+		verifyNoMoreInteractions(repository);
+	}
+
+	@Test
+	void updateAvailableCreditLimit_overflowLimit() {
+		given(repository.findById(anyLong())).willReturn(Optional.of(getAccount("12345678900", new BigDecimal("500"))));
+
+		var expected = assertThrows(CustomRuntimeException.class, () ->
+			service.updateAvailableCreditLimit(1L, OperationType.COMPRA_A_VISTA, new BigDecimal("500")));
+
+		assertThat(expected).hasMessage("account_without_limit: []");
+
+		verify(repository).findById(anyLong());
+		verifyNoMoreInteractions(repository);
+	}
+
+	@Test
 	void findById() {
-		given(repository.findById(any(Long.class))).willReturn(Optional.of(new Account()));
+		given(repository.findById(anyLong())).willReturn(Optional.of(new Account()));
 
 		var expected = service.findById(1L).orElse(null);
 		assertThat(expected).isInstanceOf(AccountDto.class);
@@ -127,7 +177,7 @@ class AccountServiceTest {
 		var expected = service.deleteById(1L);
 		assertThat(expected).isTrue();
 
-		verify(repository).deleteById(any(Long.class));
+		verify(repository).deleteById(anyLong());
 		verifyNoMoreInteractions(repository);
 	}
 

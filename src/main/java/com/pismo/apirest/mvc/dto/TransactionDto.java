@@ -1,5 +1,6 @@
 package com.pismo.apirest.mvc.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.pismo.apirest.mvc.converter.EnumsConverters;
@@ -30,6 +31,9 @@ public class TransactionDto extends PersistableDto<Long> {
 
 	@NotNull
 	private BigDecimal amount;
+
+	@JsonIgnore
+	private BigDecimal balance;
 
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private LocalDateTime eventDate;

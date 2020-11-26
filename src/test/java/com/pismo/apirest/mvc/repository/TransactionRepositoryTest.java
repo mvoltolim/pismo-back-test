@@ -24,8 +24,8 @@ class TransactionRepositoryTest {
 
 	@Test
 	void operationNegative_ammountNegative() {
-		Arrays.stream(OperationType.values()).filter(OperationType::isNegativo).forEach(value -> {
-			var entity = getTransaction(value);
+		Arrays.stream(OperationType.values()).filter(OperationType::isNegative).forEach(value -> {
+			var entity = getTransaction(value, "123.45");
 			repository.save(entity);
 			assertThat(entity.getAmount()).isEqualTo("-123.45");
 		});
@@ -33,8 +33,8 @@ class TransactionRepositoryTest {
 
 	@Test
 	void operationTypePositive_ammountPositive() {
-		Arrays.stream(OperationType.values()).filter(operationType -> !operationType.isNegativo()).forEach(value -> {
-			var entity = getTransaction(value);
+		Arrays.stream(OperationType.values()).filter(operationType -> !operationType.isNegative()).forEach(value -> {
+			var entity = getTransaction(value, "123.45");
 			repository.save(entity);
 			assertThat(entity.getAmount()).isEqualTo("123.45");
 		});
@@ -42,7 +42,7 @@ class TransactionRepositoryTest {
 
 	@Test
 	void usingEnumConverterGeneric() {
-		var id = testEntityManager.persistAndGetId(getTransaction(SAQUE), Long.class);
+		var id = testEntityManager.persistAndGetId(getTransaction(SAQUE, "123.45"), Long.class);
 		var typeBd = testEntityManager.getEntityManager()
 									  .createNativeQuery("SELECT operation_type FROM Transaction WHERE id = :id")
 									  .setParameter("id", id)

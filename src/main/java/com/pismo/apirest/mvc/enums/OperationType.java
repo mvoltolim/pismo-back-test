@@ -9,17 +9,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum OperationType implements PersistableEnum<Integer> {
 
-	COMPRA_A_VISTA(1, ValueType.NEGATIVO),
-	COMPRA_PARCELADA(2, ValueType.NEGATIVO),
-	SAQUE(3, ValueType.NEGATIVO),
-	PAGAMENTO(4, ValueType.POSITIVO),
+	COMPRA_A_VISTA(1, 2, ValueType.NEGATIVO),
+	COMPRA_PARCELADA(2, 1, ValueType.NEGATIVO),
+	SAQUE(3, 0, ValueType.NEGATIVO),
+	PAGAMENTO(4, 0, ValueType.POSITIVO),
 	;
 
 	private final Integer id;
 
+	private final Integer chargeOrder;
+
 	private final ValueType valueType;
 
-	public boolean isNegativo() {
+	public boolean isNegative() {
 		return valueType == ValueType.NEGATIVO;
 	}
 

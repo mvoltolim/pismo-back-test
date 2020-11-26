@@ -7,7 +7,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +116,7 @@ class TransactionControllerTest {
 
 	@Test
 	void getById() throws Exception {
-		given(service.findById(anyLong())).willReturn(Optional.of(getTransactionDto(1L, 1L, OperationType.COMPRA_A_VISTA, new BigDecimal("123.45"))));
+		given(service.findById(anyLong())).willReturn(Optional.of(getTransactionDto(1L, 1L, OperationType.COMPRA_A_VISTA, "123.45")));
 
 		mvc.perform(get("/transactions/1"))
 		   .andExpect(status().isOk())
